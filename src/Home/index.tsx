@@ -13,6 +13,7 @@ import { PullView } from 'react-native-pull';
 interface IState {
   newsList: INewsItem[];
   txtPull: string;
+  refreshing: boolean;
 }
 
 class Home extends React.PureComponent<{}, IState> {
@@ -21,7 +22,8 @@ class Home extends React.PureComponent<{}, IState> {
     super(props);
     this.state = {
       newsList: [],
-      txtPull: ''
+      txtPull: '',
+      refreshing: false
     }
   }
 
@@ -51,7 +53,8 @@ class Home extends React.PureComponent<{}, IState> {
 
     const timeOutId = setTimeout(() => {
       this.setState({
-        newsList: CNewsData.GetNews()
+        newsList: CNewsData.GetNews(),
+        refreshing: false
       })
       clearTimeout(timeOutId);
       resolve();
@@ -63,6 +66,9 @@ class Home extends React.PureComponent<{}, IState> {
     let txt = '';
     if (pulling) {
       txt = '下拉刷新...'
+      this.setState({
+        refreshing: true
+      })
     } else if (pullok) {
       txt = '松开刷新...'
     } else if (pullrelease) {
@@ -73,7 +79,11 @@ class Home extends React.PureComponent<{}, IState> {
     })
     return (
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 60 }}>
-        <ActivityIndicator size='small' color='#2CB044' />
+        {
+          (this.state.refreshing) && (
+            <ActivityIndicator size='small' color='#2CB044'/>
+          )
+        }
         <Text style={{ color: '#666' }}>{this.state.txtPull}</Text>
       </View >
     )
@@ -83,7 +93,7 @@ class Home extends React.PureComponent<{}, IState> {
     const { newsList } = this.state;
     return (
       <View style={styles.container}>
-        <PullView onPullRelease={this.onRefresh} topIndicatorRender={this.topIndicatorRender} topIndicatorHeight={60}>
+        <PullView onPullRelease={this.onRefresh} topIndicatorRender={this.topIndicatorRender}>
           {
             newsList.map(this.renderNews)
           }
@@ -95,7 +105,8 @@ class Home extends React.PureComponent<{}, IState> {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    paddingTop: 10
   }
 })
 

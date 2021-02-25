@@ -43,8 +43,8 @@ class TabButton extends React.PureComponent<IProps> {
       iconSize = 25
     } = this.props;
     return (
-      <View style={{ flexDirection: 'column', paddingTop: 9, paddingBottom: 9, width: 50 }}>
-        <TouchableOpacity style={{ alignItems: 'center' }} onPress={this.pressed} activeOpacity={0.9}>
+      <View style={{ flexDirection: 'column', paddingTop: 9, paddingBottom: 20, width: 50 }}>
+        <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }} onPress={this.pressed} activeOpacity={0.9}>
           {
             (iconNormal && iconSelected) && <Image source={focused ? iconSelected : iconNormal} resizeMode='contain' style={{ width: iconSize, height: iconSize }} />
           }

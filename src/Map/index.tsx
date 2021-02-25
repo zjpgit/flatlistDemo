@@ -1,6 +1,9 @@
 import React from 'react';
 import {
-  View, StyleSheet, StatusBar, DeviceEventEmitter
+  View, 
+  StyleSheet, 
+  StatusBar,
+  SafeAreaView
 } from 'react-native';
 import { MapView } from 'react-native-baidu-map';
 
