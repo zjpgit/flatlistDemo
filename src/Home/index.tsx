@@ -63,7 +63,6 @@ class Home extends React.PureComponent<{}, IState> {
 
   topIndicatorRender = (pulling: boolean, pullok: boolean, pullrelease: boolean) => {
     console.log('pulling: ', pulling, 'pullok: ', pullok, 'pullrelease: ', pullrelease);
-    let txt = '';
     if (pulling) {
       this.setState({
         refreshing: true,
@@ -72,27 +71,28 @@ class Home extends React.PureComponent<{}, IState> {
       this.txtPullok && this.txtPullok.setNativeProps({style: {display: 'none'}});
       this.txtPullrelease && this.txtPullrelease.setNativeProps({style: {display: 'none'}});
     } else if (pullok) {
-      txt = '松开刷新...';
       this.txtPulling && this.txtPulling.setNativeProps({style: {display: 'none'}});
       this.txtPullok && this.txtPullok.setNativeProps({style: {display: 'flex'}});
       this.txtPullrelease && this.txtPullrelease.setNativeProps({style: {display: 'none'}});
     } else if (pullrelease) {
-      txt = '玩命加载中...'
       this.txtPulling && this.txtPulling.setNativeProps({style: {display: 'none'}});
       this.txtPullok && this.txtPullok.setNativeProps({style: {display: 'none'}});
       this.txtPullrelease && this.txtPullrelease.setNativeProps({style: {display: 'flex'}});
     }
     
     return (
-      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 60 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 60}}>
         {
           (this.state.refreshing) && (
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
             <ActivityIndicator size='small' color='#2CB044'/>
+            <Text ref={c=>this.txtPulling=c} style={{ color: '#666', display: 'flex'}}>下拉刷新...</Text>
+            <Text ref={c=>this.txtPullok=c} style={{ color: '#666', display: 'none'}}>松开刷新...</Text>
+            <Text ref={c=>this.txtPullrelease=c} style={{ color: '#666', display: 'none'}}>玩命加载中...</Text>
+            </View>
           )
         }
-        <Text ref={c=>this.txtPulling=c} style={{ color: '#666', display: 'flex'}}>下拉刷新...</Text>
-        <Text ref={c=>this.txtPullok=c} style={{ color: '#666', display: 'flex'}}>松开刷新...</Text>
-        <Text ref={c=>this.txtPullrelease=c} style={{ color: '#666', display: 'flex'}}>玩命加载中...</Text>
+        
       </View >
     )
   }
@@ -114,7 +114,7 @@ class Home extends React.PureComponent<{}, IState> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 10
+    top: 10
   }
 })
 

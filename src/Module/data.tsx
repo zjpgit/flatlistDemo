@@ -16,7 +16,8 @@ export interface IBottomTab {
 export enum E_BOTTOM_TAB_TYPE {
   E_BOTTOM_TAB_HOME = 1,
   E_BOTTOM_TAB_MAP = 2,
-  E_BOTTOM_TAB_MINE = 3,
+  E_BOTTOM_TAB_VIDEO = 3,
+  E_BOTTOM_TAB_MINE = 4,
 }
 
 const BottomTabs: IBottomTab[] = [
@@ -31,6 +32,12 @@ const BottomTabs: IBottomTab[] = [
     title: '地图',
     iconNormal: require('../assert/map.png'),
     iconSelected: require('../assert/map_selected.png')
+  },
+  {
+    id: E_BOTTOM_TAB_TYPE.E_BOTTOM_TAB_VIDEO,
+    title: '视频',
+    iconNormal: require('../assert/video.png'),
+    iconSelected: require('../assert/video_selected.png')
   },
   {
     id: E_BOTTOM_TAB_TYPE.E_BOTTOM_TAB_MINE,
