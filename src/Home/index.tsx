@@ -5,6 +5,7 @@ import {
   FlatList,
   StyleSheet,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { INewsItem, CNewsData } from '../Module/data';
 import NewsItem from './subpages/NewsItem';
@@ -67,32 +68,32 @@ class Home extends React.PureComponent<{}, IState> {
       this.setState({
         refreshing: true,
       })
-      this.txtPulling && this.txtPulling.setNativeProps({style: {display: 'flex'}});
-      this.txtPullok && this.txtPullok.setNativeProps({style: {display: 'none'}});
-      this.txtPullrelease && this.txtPullrelease.setNativeProps({style: {display: 'none'}});
+      this.txtPulling && this.txtPulling.setNativeProps({ style: { display: 'flex' } });
+      this.txtPullok && this.txtPullok.setNativeProps({ style: { display: 'none' } });
+      this.txtPullrelease && this.txtPullrelease.setNativeProps({ style: { display: 'none' } });
     } else if (pullok) {
-      this.txtPulling && this.txtPulling.setNativeProps({style: {display: 'none'}});
-      this.txtPullok && this.txtPullok.setNativeProps({style: {display: 'flex'}});
-      this.txtPullrelease && this.txtPullrelease.setNativeProps({style: {display: 'none'}});
+      this.txtPulling && this.txtPulling.setNativeProps({ style: { display: 'none' } });
+      this.txtPullok && this.txtPullok.setNativeProps({ style: { display: 'flex' } });
+      this.txtPullrelease && this.txtPullrelease.setNativeProps({ style: { display: 'none' } });
     } else if (pullrelease) {
-      this.txtPulling && this.txtPulling.setNativeProps({style: {display: 'none'}});
-      this.txtPullok && this.txtPullok.setNativeProps({style: {display: 'none'}});
-      this.txtPullrelease && this.txtPullrelease.setNativeProps({style: {display: 'flex'}});
+      this.txtPulling && this.txtPulling.setNativeProps({ style: { display: 'none' } });
+      this.txtPullok && this.txtPullok.setNativeProps({ style: { display: 'none' } });
+      this.txtPullrelease && this.txtPullrelease.setNativeProps({ style: { display: 'flex' } });
     }
-    
+
     return (
-      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 60}}>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 60 }}>
         {
           (this.state.refreshing) && (
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-            <ActivityIndicator size='small' color='#2CB044'/>
-            <Text ref={c=>this.txtPulling=c} style={{ color: '#666', display: 'flex'}}>下拉刷新...</Text>
-            <Text ref={c=>this.txtPullok=c} style={{ color: '#666', display: 'none'}}>松开刷新...</Text>
-            <Text ref={c=>this.txtPullrelease=c} style={{ color: '#666', display: 'none'}}>玩命加载中...</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <ActivityIndicator size='small' color='#2CB044' />
+              <Text ref={c => this.txtPulling = c} style={{ color: '#666', display: 'flex' }}>下拉刷新...</Text>
+              <Text ref={c => this.txtPullok = c} style={{ color: '#666', display: 'none' }}>松开刷新...</Text>
+              <Text ref={c => this.txtPullrelease = c} style={{ color: '#666', display: 'none' }}>玩命加载中...</Text>
             </View>
           )
         }
-        
+
       </View >
     )
   }
@@ -101,7 +102,7 @@ class Home extends React.PureComponent<{}, IState> {
     const { newsList } = this.state;
     return (
       <View style={styles.container}>
-        <PullView onPullRelease={this.onRefresh} topIndicatorRender={this.topIndicatorRender.bind(this)}>
+        <PullView onPullRelease={this.onRefresh} topIndicatorRender={Platform.OS == 'ios' ? this.topIndicatorRender : null}>
           {
             newsList.map(this.renderNews)
           }
