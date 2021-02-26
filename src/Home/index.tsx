@@ -65,18 +65,24 @@ class Home extends React.PureComponent<{}, IState> {
     console.log('pulling: ', pulling, 'pullok: ', pullok, 'pullrelease: ', pullrelease);
     let txt = '';
     if (pulling) {
-      txt = '下拉刷新...'
       this.setState({
-        refreshing: true
+        refreshing: true,
       })
+      this.txtPulling && this.txtPulling.setNativeProps({style: {display: 'flex'}});
+      this.txtPullok && this.txtPullok.setNativeProps({style: {display: 'none'}});
+      this.txtPullrelease && this.txtPullrelease.setNativeProps({style: {display: 'none'}});
     } else if (pullok) {
-      txt = '松开刷新...'
+      txt = '松开刷新...';
+      this.txtPulling && this.txtPulling.setNativeProps({style: {display: 'none'}});
+      this.txtPullok && this.txtPullok.setNativeProps({style: {display: 'flex'}});
+      this.txtPullrelease && this.txtPullrelease.setNativeProps({style: {display: 'none'}});
     } else if (pullrelease) {
       txt = '玩命加载中...'
+      this.txtPulling && this.txtPulling.setNativeProps({style: {display: 'none'}});
+      this.txtPullok && this.txtPullok.setNativeProps({style: {display: 'none'}});
+      this.txtPullrelease && this.txtPullrelease.setNativeProps({style: {display: 'flex'}});
     }
-    this.setState({
-      txtPull: txt
-    })
+    
     return (
       <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 60 }}>
         {
@@ -84,7 +90,9 @@ class Home extends React.PureComponent<{}, IState> {
             <ActivityIndicator size='small' color='#2CB044'/>
           )
         }
-        <Text style={{ color: '#666' }}>{this.state.txtPull}</Text>
+        <Text ref={c=>this.txtPulling=c} style={{ color: '#666', display: 'flex'}}>下拉刷新...</Text>
+        <Text ref={c=>this.txtPullok=c} style={{ color: '#666', display: 'flex'}}>松开刷新...</Text>
+        <Text ref={c=>this.txtPullrelease=c} style={{ color: '#666', display: 'flex'}}>玩命加载中...</Text>
       </View >
     )
   }
@@ -93,7 +101,7 @@ class Home extends React.PureComponent<{}, IState> {
     const { newsList } = this.state;
     return (
       <View style={styles.container}>
-        <PullView onPullRelease={this.onRefresh} topIndicatorRender={this.topIndicatorRender}>
+        <PullView onPullRelease={this.onRefresh} topIndicatorRender={this.topIndicatorRender.bind(this)}>
           {
             newsList.map(this.renderNews)
           }
