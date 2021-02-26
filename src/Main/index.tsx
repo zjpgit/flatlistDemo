@@ -11,7 +11,7 @@ import { E_BOTTOM_TAB_TYPE } from '../Module/data';
 import Home from '../Home';
 import Map from '../Map';
 import Mine from '../Mine';
-import Video from '../Video'
+import VideoPage from '../Video'
 import { BaiduMapManager } from 'react-native-baidu-map'
 if(Platform.OS == 'ios'){
   BaiduMapManager.initSDK('VHmD6E6p5bXZ7jKLbaGTMh7VIU8uSKAq');
@@ -68,7 +68,7 @@ class Main extends React.PureComponent<{}, IState> {
           }
           {
             (selectedBottomTabId == E_BOTTOM_TAB_TYPE.E_BOTTOM_TAB_VIDEO) && (
-              <Video />
+              <VideoPage />
             )
           }
         </View>
