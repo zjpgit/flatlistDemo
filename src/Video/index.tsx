@@ -12,7 +12,7 @@ import {
 import Video from 'react-native-video';
 import Slider from 'react-native-slider';
 
-const {scale, width} = Dimensions.get('window');
+const { scale, width } = Dimensions.get('window');
 const whScale = width * scale / 1080;
 
 interface IState {
@@ -51,7 +51,7 @@ class VideoPage extends React.PureComponent<{}, IState> {
     let w = 0;
     let h = 0;
     let d = 0;
-    if(data){
+    if (data) {
       w = data['naturalSize']['width'];
       h = data['naturalSize']['height'];
       d = data['duration'];
@@ -78,8 +78,8 @@ class VideoPage extends React.PureComponent<{}, IState> {
   }
 
   onEnd = (data: any) => {
-    if(data['target'] == this.target){
-      if(this.player){
+    if (data['target'] == this.target) {
+      if (this.player) {
         this.player.seek(0);
       }
       let timeId = setTimeout(() => {
@@ -92,10 +92,6 @@ class VideoPage extends React.PureComponent<{}, IState> {
     }
   }
 
-  onPress = () => {
-    console.log('pressed');
-  }
-
   //格式化音乐播放的时间为0：00。借助onProgress的定时器调用，更新当前时间
   formatMediaTime = (time: number): string => {
     let minute = Math.floor(time / 60);
@@ -106,14 +102,17 @@ class VideoPage extends React.PureComponent<{}, IState> {
   }
 
   // 移动滑块，改变视频播放进度
-  customerSliderValue = (value:number) => {
-    if(this.player){
+  customerSliderValue = (value: number) => {
+    if (this.player) {
       this.player.seek(value);
     }
+    this.setState({
+      currentTime: value
+    })
   }
 
   onPlayOrPause = () => {
-    const{isPlay} = this.state;
+    const { isPlay } = this.state;
     let play = isPlay ? false : true;
     let pause = isPlay ? true : false;
     this.setState({
@@ -123,10 +122,10 @@ class VideoPage extends React.PureComponent<{}, IState> {
   }
 
   render() {
-    const { 
+    const {
       isLoading,
       showControl,
-      isPlay, 
+      isPlay,
       paused,
       videoWidth,
       videoHeight,
@@ -143,40 +142,38 @@ class VideoPage extends React.PureComponent<{}, IState> {
             </View>
           )
         }
-        <TouchableWithoutFeedback onFocus={(e)=>{
+        <TouchableWithoutFeedback onFocus={(e) => {
           console.log('focus on');
           this.setState({
-            showControl:true
+            showControl: true
           })
         }} onBlur={() => {
           console.log('focus out');
           this.setState({
             showControl: false
           })
-        }} onPress={this.onPlayOrPause} 
-        onResponderMove={() => {console.log('111111')}}>
-          <View style={[styles.viewVideo, {width: '100%',height: videoHeight,}]}>
+        }} onPress={this.onPlayOrPause}>
+          <View style={[styles.viewVideo, { width: '100%', height: videoHeight, }]}>
             <Video
               ref={v => this.player = v}
               source={{ uri: this.uri }}
-              style={{width: videoWidth, height: videoHeight, backgroundColor:"#FFC1C1"}}
-              resizeMode=''
+              style={{ width: videoWidth * whScale, height: videoHeight * whScale, backgroundColor: "#FFC1C1" }}
+              resizeMode='cover'
               paused={paused}
               onLoad={this.onLoad}
               onEnd={this.onEnd}
-              onPress={this.onPress}
               onProgress={this.onProgress}
             />
             {
-              (showControl) && (
-                <View style={{width: '96%', position: 'absolute', bottom: 9, zIndex: 8, backgroundColor: "rgba(70,70,70,0.95)", borderRadius: 9}}>
-                  <View style={{flex: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+              (showControl && !isLoading) && (
+                <View style={{ width: '96%', position: 'absolute', bottom: 9, zIndex: 8, backgroundColor: "rgba(70,70,70,0.95)", borderRadius: 9 }}>
+                  <View style={{ flex: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <TouchableOpacity onPress={this.onPlayOrPause} activeOpacity={0.7}>
-                      <Image source={ isPlay ? require('../assert/pause.png') : require('../assert/play.png')} style={styles.image}/>
+                      <Image source={isPlay ? require('../assert/pause.png') : require('../assert/play.png')} style={styles.image} />
                     </TouchableOpacity>
                     <Text style={styles.textTime}>{this.formatMediaTime(currentTime)}</Text>
-                    <Slider 
-                      style={{flex: 1, height: 40}}
+                    <Slider
+                      style={{ flex: 1, height: 40 }}
                       thumbTintColor="white"
                       minimumTrackTintColor='rgb(161, 161, 165)'
                       maximumTrackTintColor='rgb(112, 112, 115)'
@@ -190,10 +187,10 @@ class VideoPage extends React.PureComponent<{}, IState> {
                 </View>
               )
             }
-            
+
           </View>
         </TouchableWithoutFeedback>
-        
+
       </View>
     )
   }
@@ -202,7 +199,7 @@ class VideoPage extends React.PureComponent<{}, IState> {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center", 
+    justifyContent: "center",
     alignItems: "center"
   },
   videoDefault: {
@@ -226,7 +223,7 @@ var styles = StyleSheet.create({
     width: 48,
     height: 48
   },
-  viewVideo:{
+  viewVideo: {
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
